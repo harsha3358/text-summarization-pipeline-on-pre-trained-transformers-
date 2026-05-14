@@ -1,13 +1,14 @@
 :root {
-  --primary-color: #ff00ff; /* Neon Pink */
-  --secondary-color: #00ffff; /* Cyan */
-  --bg-gradient-start: #0f0c29;
-  --bg-gradient-mid: #302b63;
-  --bg-gradient-end: #24243e;
-  --text-color: #ffffff;
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --primary-color: #ff9a9e; /* Soft Pastel Pink */
+  --secondary-color: #fecfef; /* Light Lilac */
+  --accent-color: #a1c4fd; /* Baby Blue */
+  --bg-gradient-start: #fdfbfb;
+  --bg-gradient-mid: #ebedee;
+  --bg-gradient-end: #fdfbfb;
+  --text-color: #2c3e50; /* Dark slate for readability */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.8);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   --font-family: 'Outfit', sans-serif;
 }
 
@@ -54,24 +55,23 @@ body {
 .title {
   font-size: 3.5rem;
   font-weight: 800;
-  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(to right, #ff758c, #ff7eb3);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0px 0px 20px rgba(255, 0, 255, 0.3);
   letter-spacing: -1px;
 }
 
 .subtitle {
   font-size: 1.2rem;
-  font-weight: 300;
-  opacity: 0.8;
+  font-weight: 400;
+  opacity: 0.7;
   margin-top: 0.5rem;
 }
 
 .glass-card {
   background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: 24px;
   padding: 2rem;
@@ -81,68 +81,101 @@ body {
 
 .glass-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.15);
 }
 
 .textarea-container {
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
+}
+
+.mode-toggle {
+  display: flex;
+  justify-content: center;
   gap: 1rem;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 0.5rem;
+  border-radius: 50px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mode-btn.active {
+  background: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  color: #ff758c;
 }
 
 .textarea {
   width: 100%;
   min-height: 200px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid transparent;
   border-radius: 16px;
-  padding: 1rem;
+  padding: 1.5rem;
   color: var(--text-color);
   font-family: var(--font-family);
   font-size: 1.1rem;
   resize: vertical;
   outline: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
 }
 
 .textarea:focus {
-  border-color: var(--secondary-color);
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+  border-color: #ff9a9e;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02), 0 0 0 4px rgba(255, 154, 158, 0.2);
 }
 
 .btn {
-  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(45deg, #ff758c, #ff7eb3);
   border: none;
   border-radius: 50px;
-  padding: 1rem 2.5rem;
+  padding: 1.2rem 2.5rem;
   color: white;
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
   font-family: var(--font-family);
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 0, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 117, 140, 0.3);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(0, 255, 255, 0.4);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(255, 117, 140, 0.4);
 }
 
 .btn:disabled {
-  background: #555;
+  background: #cbd5e1;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
-  opacity: 0.7;
+  color: #64748b;
 }
 
 .result-container {
   margin-top: 2rem;
+  background: white;
 }
 
 .result-title {
@@ -151,12 +184,14 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: #ff758c;
 }
 
 .result-text {
   font-size: 1.2rem;
-  line-height: 1.6;
-  font-weight: 300;
+  line-height: 1.8;
+  font-weight: 400;
+  color: var(--text-color);
 }
 
 /* Loading animations */
@@ -165,52 +200,54 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  margin: 1rem 0;
+  margin: 1.5rem 0;
 }
 
 .progress-bar-bg {
   width: 100%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-  border-radius: 4px;
-  transition: width 0.2s ease-out;
+  background: linear-gradient(90deg, #ff758c, #ff7eb3, var(--accent-color));
+  background-size: 200% 200%;
+  animation: gradientBG 2s ease infinite;
+  border-radius: 10px;
+  transition: width 0.3s ease-out;
 }
 
 /* Floating background blobs */
 .blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(100px);
   z-index: 1;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .blob-1 {
   top: -10%;
   left: -10%;
-  width: 400px;
-  height: 400px;
-  background: var(--primary-color);
+  width: 500px;
+  height: 500px;
+  background: #ff9a9e;
   animation: float 10s infinite alternate;
 }
 
 .blob-2 {
   bottom: -10%;
   right: -10%;
-  width: 500px;
-  height: 500px;
-  background: var(--secondary-color);
+  width: 600px;
+  height: 600px;
+  background: var(--accent-color);
   animation: float 12s infinite alternate-reverse;
 }
 
 @keyframes float {
   0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(50px, 50px) scale(1.2); }
+  100% { transform: translate(50px, 50px) scale(1.1); }
 }

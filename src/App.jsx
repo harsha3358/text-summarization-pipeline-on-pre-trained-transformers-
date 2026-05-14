@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Sparkles, ArrowRight, Loader2 } from 'lucide-react';
+import { Sparkles, ArrowRight, Loader2, AlignLeft, Scissors } from 'lucide-react';
 import './index.css';
 
 function App() {
@@ -8,6 +8,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadingText, setLoadingText] = useState('Initializing AI...');
+  const [mode, setMode] = useState('abstractive'); // 'abstractive' or 'extractive'
   
   // Create a reference to the worker object
   const worker = useRef(null);
@@ -24,7 +25,7 @@ function App() {
     const onMessageReceived = (e) => {
       switch (e.data.status) {
         case 'progress':
-          setLoadingText(`Downloading AI Model... (${e.data.file || 'loading'})`);
+          setLoadingText(`Downloading ${mode === 'abstractive' ? 'distilbart' : 'MiniLM'} AI Model... (${e.data.file || 'loading'})`);
           if (e.data.progress) {
             setLoadingProgress(e.data.progress);
           }
@@ -41,7 +42,7 @@ function App() {
           break;
         case 'error':
           console.error(e.data.error);
-          setSummary('An error occurred during summarization.');
+          setSummary('An error occurred during summarization. Please make sure the text is long enough.');
           setIsLoading(false);
           break;
       }
@@ -50,14 +51,15 @@ function App() {
     worker.current.addEventListener('message', onMessageReceived);
 
     return () => worker.current.removeEventListener('message', onMessageReceived);
-  }, []);
+  }, [mode]);
 
   const handleSummarize = () => {
     if (!text.trim()) return;
     setIsLoading(true);
     setSummary('');
-    // Send the text to the worker for processing
-    worker.current.postMessage({ text });
+    setLoadingProgress(0);
+    // Send the text and mode to the worker for processing
+    worker.current.postMessage({ text, mode });
   };
 
   return (
@@ -68,14 +70,37 @@ function App() {
       <div className="app-container">
         <header className="header">
           <h1 className="title">AI TL;DR</h1>
-          <p className="subtitle">Zero latency. Infinite scale. Pure magic.</p>
+          <p className="subtitle">Pre-trained Transformers running directly in your browser.</p>
         </header>
 
         <main className="glass-card">
           <div className="textarea-container">
+            
+            {/* Mode Toggle */}
+            <div className="mode-toggle">
+              <button 
+                className={`mode-btn ${mode === 'abstractive' ? 'active' : ''}`}
+                onClick={() => setMode('abstractive')}
+                disabled={isLoading}
+                title="AI rewrites the text to be shorter"
+              >
+                <Sparkles size={16} style={{display: 'inline', marginRight: '5px', verticalAlign: 'text-bottom'}} />
+                Abstractive
+              </button>
+              <button 
+                className={`mode-btn ${mode === 'extractive' ? 'active' : ''}`}
+                onClick={() => setMode('extractive')}
+                disabled={isLoading}
+                title="AI extracts the most important exact sentences"
+              >
+                <Scissors size={16} style={{display: 'inline', marginRight: '5px', verticalAlign: 'text-bottom'}} />
+                Extractive
+              </button>
+            </div>
+
             <textarea
               className="textarea"
-              placeholder="Paste your long, boring text here and watch the AI do its thing..."
+              placeholder={`Paste your text here... \n\n${mode === 'abstractive' ? 'Abstractive Mode: The AI will rewrite your text in its own words.' : 'Extractive Mode: The AI will select the most semantically important sentences using embeddings.'}`}
               value={text}
               onChange={(e) => setText(e.target.value)}
               disabled={isLoading}
@@ -93,7 +118,7 @@ function App() {
                 </>
               ) : (
                 <>
-                  <Sparkles />
+                  <AlignLeft />
                   Make it Short
                   <ArrowRight />
                 </>
@@ -116,8 +141,8 @@ function App() {
           {summary && (
             <div className="result-container glass-card">
               <h2 className="result-title">
-                <Sparkles size={20} color="var(--primary-color)" />
-                The TL;DR
+                {mode === 'abstractive' ? <Sparkles size={20} /> : <Scissors size={20} />}
+                {mode === 'abstractive' ? 'Rewritten Summary' : 'Extracted Highlights'}
               </h2>
               <p className="result-text">{summary}</p>
             </div>
