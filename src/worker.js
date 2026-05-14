@@ -1,4 +1,4 @@
-import { pipeline, env, cos_sim } from '@xenova/transformers';
+import { pipeline, env } from '@xenova/transformers';
 
 // Disable local models to force downloading from Hugging Face Hub.
 env.allowLocalModels = false;
@@ -27,6 +27,20 @@ class PipelineSingleton {
 // Helper to split text into sentences simply
 function splitIntoSentences(text) {
   return text.match(/[^.!?]+[.!?]+/g) || [text];
+}
+
+// Custom cosine similarity function to avoid import issues
+function cosineSimilarity(a, b) {
+    let dotProduct = 0;
+    let normA = 0;
+    let normB = 0;
+    for (let i = 0; i < a.length; i++) {
+        dotProduct += a[i] * b[i];
+        normA += a[i] * a[i];
+        normB += b[i] * b[i];
+    }
+    if (normA === 0 || normB === 0) return 0;
+    return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
 self.addEventListener('message', async (event) => {
@@ -71,7 +85,7 @@ self.addEventListener('message', async (event) => {
         const sentenceEmbedding = sentenceOutput.data;
         
         // Calculate similarity to the whole document
-        const similarity = cos_sim(docEmbedding, sentenceEmbedding);
+        const similarity = cosineSimilarity(docEmbedding, sentenceEmbedding);
         scoredSentences.push({ sentence, similarity, index: i });
       }
 

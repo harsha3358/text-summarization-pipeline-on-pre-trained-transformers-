@@ -69,8 +69,8 @@ function App() {
       
       <div className="app-container">
         <header className="header">
-          <h1 className="title">AI TL;DR</h1>
-          <p className="subtitle">Pre-trained Transformers running directly in your browser.</p>
+          <h1 className="title">AI TL;DR ✨</h1>
+          <p className="subtitle">Skip the yap. Get straight to the point.</p>
         </header>
 
         <main className="glass-card">
@@ -85,7 +85,7 @@ function App() {
                 title="AI rewrites the text to be shorter"
               >
                 <Sparkles size={16} style={{display: 'inline', marginRight: '5px', verticalAlign: 'text-bottom'}} />
-                Abstractive
+                Vibe Translate (Rewrite)
               </button>
               <button 
                 className={`mode-btn ${mode === 'extractive' ? 'active' : ''}`}
@@ -94,13 +94,13 @@ function App() {
                 title="AI extracts the most important exact sentences"
               >
                 <Scissors size={16} style={{display: 'inline', marginRight: '5px', verticalAlign: 'text-bottom'}} />
-                Extractive
+                No Cap (Extract Facts)
               </button>
             </div>
 
             <textarea
               className="textarea"
-              placeholder={`Paste your text here... \n\n${mode === 'abstractive' ? 'Abstractive Mode: The AI will rewrite your text in its own words.' : 'Extractive Mode: The AI will select the most semantically important sentences using embeddings.'}`}
+              placeholder={`Drop your main character monologue here... 💅\n\n${mode === 'abstractive' ? 'Vibe Translate: The AI will rewrite your text so it passes the vibe check.' : 'No Cap Mode: The AI will extract only the absolute facts (most semantically important sentences).'}`}
               value={text}
               onChange={(e) => setText(e.target.value)}
               disabled={isLoading}
@@ -114,7 +114,7 @@ function App() {
               {isLoading ? (
                 <>
                   <Loader2 className="animate-spin" />
-                  Summarizing...
+                  Cooking...
                 </>
               ) : (
                 <>
@@ -139,10 +139,10 @@ function App() {
           )}
 
           {summary && (
-            <div className="result-container glass-card">
+            <div className="result-container glass-card" style={{marginTop: '1rem'}}>
               <h2 className="result-title">
                 {mode === 'abstractive' ? <Sparkles size={20} /> : <Scissors size={20} />}
-                {mode === 'abstractive' ? 'Rewritten Summary' : 'Extracted Highlights'}
+                {mode === 'abstractive' ? 'The Vibe (TL;DR)' : 'The Facts (Extracted)'}
               </h2>
               <p className="result-text">{summary}</p>
             </div>
